@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'voice_screen.dart';
+import 'upload_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -18,6 +19,8 @@ class HomeScreen extends StatelessWidget {
           color: Colors.black,
         ),
 
+        centerTitle: true,
+
         title: const Text(
           "Krishi Mitra",
           style: TextStyle(
@@ -25,8 +28,6 @@ class HomeScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-
-        centerTitle: true,
 
         actions: const [
           Padding(
@@ -46,11 +47,10 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-
             const Text(
               "Hello Farmer! 👋",
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -60,8 +60,8 @@ class HomeScreen extends StatelessWidget {
             const Text(
               "How can we assist you today?",
               style: TextStyle(
+                fontSize: 18,
                 color: Colors.grey,
-                fontSize: 16,
               ),
             ),
 
@@ -69,10 +69,8 @@ class HomeScreen extends StatelessWidget {
 
             Row(
               children: [
-
                 Expanded(
                   child: GestureDetector(
-
                     onTap: () {
                       Navigator.push(
                         context,
@@ -92,11 +90,12 @@ class HomeScreen extends StatelessWidget {
 
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
 
+                        children: [
                           CircleAvatar(
                             radius: 35,
                             backgroundColor: Colors.green,
+
                             child: Icon(
                               Icons.mic,
                               color: Colors.white,
@@ -104,21 +103,22 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
 
-                          SizedBox(height: 20),
+                          SizedBox(height: 15),
 
                           Text(
                             "Speak",
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 28,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
 
-                          SizedBox(height: 8),
+                          SizedBox(height: 10),
 
                           Text(
                             "Describe your\nproblem",
                             textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16),
                           ),
                         ],
                       ),
@@ -129,67 +129,80 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(width: 20),
 
                 Expanded(
-                  child: Container(
-                    height: 180,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UploadScreen(),
+                        ),
+                      );
+                    },
 
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade50,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                    child: Container(
+                      height: 180,
 
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
 
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.green,
-                          child: Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                            size: 35,
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+
+                        children: [
+                          CircleAvatar(
+                            radius: 35,
+                            backgroundColor: Colors.green,
+
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 35,
+                            ),
                           ),
-                        ),
 
-                        SizedBox(height: 20),
+                          SizedBox(height: 15),
 
-                        Text(
-                          "Upload",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            "Upload",
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
 
-                        SizedBox(height: 8),
+                          SizedBox(height: 10),
 
-                        Text(
-                          "Upload leaf\nimage",
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                          Text(
+                            "Upload leaf\nimage",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
 
             const Text(
               "Quick Access",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
 
+              children: [
                 quickItem(Icons.eco, "Disease"),
                 quickItem(Icons.bug_report, "Pests"),
                 quickItem(Icons.water_drop, "Fertilizer"),
@@ -204,8 +217,8 @@ class HomeScreen extends StatelessWidget {
 
   static Widget quickItem(IconData icon, String title) {
     return Container(
-      width: 75,
-      height: 75,
+      width: 80,
+      height: 80,
 
       decoration: BoxDecoration(
         color: Colors.green.shade50,
@@ -214,9 +227,12 @@ class HomeScreen extends StatelessWidget {
 
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
 
-          Icon(icon, color: Colors.green),
+        children: [
+          Icon(
+            icon,
+            color: Colors.green,
+          ),
 
           const SizedBox(height: 5),
 
