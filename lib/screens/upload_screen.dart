@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 
-class UploadScreen extends StatelessWidget {
+class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
+
+  @override
+  State<UploadScreen> createState() => _UploadScreenState();
+}
+
+class _UploadScreenState extends State<UploadScreen> {
+  bool imageUploaded = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5FFF5),
+      backgroundColor: Colors.white,
 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
+        backgroundColor: Colors.white,
 
         title: const Text(
           "Upload Image",
-          style: TextStyle(
-            color: Colors.black,
-          ),
+          style: TextStyle(color: Colors.green),
         ),
       ),
 
@@ -29,57 +29,79 @@ class UploadScreen extends StatelessWidget {
 
         child: Column(
           children: [
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  imageUploaded = true;
+                });
+              },
 
-            const SizedBox(height: 20),
+              child: Container(
+                height: 250,
+                width: double.infinity,
 
-            Container(
-              height: 250,
-              width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.green.shade50,
 
-              decoration: BoxDecoration(
-                color: Colors.green.shade50,
-                borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20),
 
-                border: Border.all(
-                  color: Colors.green,
-                  width: 2,
+                  border: Border.all(color: Colors.green.shade200),
                 ),
-              ),
 
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                child: imageUploaded
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
 
-                children: const [
+                        children: const [
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                            size: 80,
+                          ),
 
-                  Icon(
-                    Icons.cloud_upload,
-                    size: 80,
-                    color: Colors.green,
-                  ),
+                          SizedBox(height: 20),
 
-                  SizedBox(height: 20),
+                          Text(
+                            "Image Uploaded Successfully",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
 
-                  Text(
-                    "Tap to Upload Leaf Image",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                        children: const [
+                          Icon(
+                            Icons.cloud_upload,
+                            size: 70,
+                            color: Colors.green,
+                          ),
 
-                  SizedBox(height: 10),
+                          SizedBox(height: 20),
 
-                  Text(
-                    "Upload affected crop image",
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
+                          Text(
+                            "Tap to Upload Leaf Image",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          SizedBox(height: 10),
+
+                          Text(
+                            "Upload affected crop image",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
               ),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
 
             SizedBox(
               width: double.infinity,
@@ -94,14 +116,46 @@ class UploadScreen extends StatelessWidget {
                   ),
                 ),
 
-                onPressed: () {},
+                onPressed: () {
+                  if (!imageUploaded) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Please upload image first"),
+                      ),
+                    );
+
+                    return;
+                  }
+
+                  showDialog(
+                    context: context,
+
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Disease Detected"),
+
+                        content: const Text(
+                          "Possible Disease: Leaf Blight\n\nSolution:\nUse fungicide spray and avoid overwatering.",
+                        ),
+
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
 
                 child: const Text(
                   "Analyze Image",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
+
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ),

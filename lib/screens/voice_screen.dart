@@ -8,7 +8,6 @@ class VoiceScreen extends StatefulWidget {
 }
 
 class _VoiceScreenState extends State<VoiceScreen> {
-
   bool isListening = false;
 
   @override
@@ -20,9 +19,7 @@ class _VoiceScreenState extends State<VoiceScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
 
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
+        iconTheme: const IconThemeData(color: Colors.black),
 
         title: const Text(
           "Voice Assistant",
@@ -35,7 +32,6 @@ class _VoiceScreenState extends State<VoiceScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
-
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
 
@@ -57,9 +53,7 @@ class _VoiceScreenState extends State<VoiceScreen> {
                 icon: Icon(
                   Icons.mic,
                   size: 70,
-                  color: isListening
-                      ? Colors.red
-                      : Colors.green,
+                  color: isListening ? Colors.red : Colors.green,
                 ),
               ),
             ),
@@ -67,14 +61,9 @@ class _VoiceScreenState extends State<VoiceScreen> {
             const SizedBox(height: 40),
 
             Text(
-              isListening
-                  ? "Listening..."
-                  : "Tap to Speak",
+              isListening ? "Listening..." : "Tap to Speak",
 
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 15),
@@ -86,10 +75,7 @@ class _VoiceScreenState extends State<VoiceScreen> {
                 "Describe your crop problem using voice input",
                 textAlign: TextAlign.center,
 
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ),
           ],
