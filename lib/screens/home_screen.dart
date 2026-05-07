@@ -17,13 +17,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   String selectedLanguage = "English";
 
   Map<String, Map<String, String>> translations = {
-
     "English": {
-
       "hello": "Hello Farmer! 👋",
       "assist": "How can we assist you today?",
 
@@ -39,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
     },
 
     "Hindi": {
-
       "hello": "नमस्ते किसान 👋",
       "assist": "आज हम आपकी कैसे मदद करें?",
 
@@ -55,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
     },
 
     "Kannada": {
-
       "hello": "ನಮಸ್ಕಾರ ರೈತ 👋",
       "assist": "ಇಂದು ನಾವು ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?",
 
@@ -71,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
     },
 
     "Tamil": {
-
       "hello": "வணக்கம் விவசாயி 👋",
       "assist": "இன்று எவ்வாறு உதவலாம்?",
 
@@ -89,106 +83,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
       backgroundColor: Colors.white,
 
       floatingActionButton: FloatingActionButton(
-
         backgroundColor: Colors.green,
 
         child: const Icon(Icons.chat),
 
         onPressed: () {
-
           Navigator.push(
             context,
 
-            MaterialPageRoute(
-              builder: (context) =>
-                  const ChatbotScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const ChatbotScreen()),
           );
         },
       ),
 
       appBar: AppBar(
-
         backgroundColor: Colors.white,
         elevation: 0,
 
-        leading: const Icon(
-          Icons.menu,
-          color: Colors.black,
-        ),
+        leading: const Icon(Icons.menu, color: Colors.black),
 
         centerTitle: true,
 
         title: const Text(
           "Krishi Mitra",
-          style: TextStyle(
-            color: Colors.green,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
         ),
 
         actions: [
-
           DropdownButton<String>(
-
             value: selectedLanguage,
 
             underline: Container(),
 
             items: const [
+              DropdownMenuItem(value: "English", child: Text("EN")),
 
-              DropdownMenuItem(
-                value: "English",
-                child: Text("EN"),
-              ),
+              DropdownMenuItem(value: "Hindi", child: Text("HI")),
 
-              DropdownMenuItem(
-                value: "Hindi",
-                child: Text("HI"),
-              ),
+              DropdownMenuItem(value: "Kannada", child: Text("KN")),
 
-              DropdownMenuItem(
-                value: "Kannada",
-                child: Text("KN"),
-              ),
-
-              DropdownMenuItem(
-                value: "Tamil",
-                child: Text("TA"),
-              ),
+              DropdownMenuItem(value: "Tamil", child: Text("TA")),
             ],
 
             onChanged: (value) {
-
               setState(() {
-
                 selectedLanguage = value!;
               });
             },
           ),
 
           IconButton(
-
-            icon: const Icon(
-              Icons.history,
-              color: Colors.black,
-            ),
+            icon: const Icon(Icons.history, color: Colors.black),
 
             onPressed: () {
-
               Navigator.push(
                 context,
 
-                MaterialPageRoute(
-                  builder: (context) =>
-                      const HistoryScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const HistoryScreen()),
               );
             },
           ),
@@ -196,62 +151,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       body: SingleChildScrollView(
-
         padding: const EdgeInsets.all(20),
 
         child: Column(
-
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-
             Text(
-
               translations[selectedLanguage]!["hello"]!,
 
-              style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 10),
 
             Text(
-
               translations[selectedLanguage]!["assist"]!,
 
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+              style: const TextStyle(fontSize: 18, color: Colors.grey),
             ),
 
             const SizedBox(height: 30),
 
             Row(
-
               children: [
-
                 Expanded(
-
                   child: GestureDetector(
-
                     onTap: () {
-
                       Navigator.push(
                         context,
 
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const VoiceScreen(),
+                          builder: (context) => const VoiceScreen(),
                         ),
                       );
                     },
 
                     child: featureCard(
-
                       Icons.mic,
 
                       translations[selectedLanguage]!["speak"]!,
@@ -262,23 +198,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 20),
 
                 Expanded(
-
                   child: GestureDetector(
-
                     onTap: () {
-
                       Navigator.push(
                         context,
 
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const UploadScreen(),
+                          builder: (context) => const UploadScreen(),
                         ),
                       );
                     },
 
                     child: featureCard(
-
                       Icons.camera_alt,
 
                       translations[selectedLanguage]!["upload"]!,
@@ -291,44 +222,30 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 40),
 
             Text(
-
               translations[selectedLanguage]!["quick"]!,
 
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
 
             Row(
-
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: [
-
                 GestureDetector(
-
                   onTap: () {
-
                     Navigator.push(
                       context,
 
                       MaterialPageRoute(
-
                         builder: (context) =>
-
-                            DiseaseScreen(
-                              language: selectedLanguage,
-                            ),
+                            DiseaseScreen(language: selectedLanguage),
                       ),
                     );
                   },
 
                   child: quickItem(
-
                     Icons.eco,
 
                     translations[selectedLanguage]!["disease"]!,
@@ -336,25 +253,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 GestureDetector(
-
                   onTap: () {
-
                     Navigator.push(
                       context,
 
                       MaterialPageRoute(
-
                         builder: (context) =>
-
-                            PestsScreen(
-                              language: selectedLanguage,
-                            ),
+                            PestsScreen(language: selectedLanguage),
                       ),
                     );
                   },
 
                   child: quickItem(
-
                     Icons.bug_report,
 
                     translations[selectedLanguage]!["pests"]!,
@@ -362,25 +272,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 GestureDetector(
-
                   onTap: () {
-
                     Navigator.push(
                       context,
 
                       MaterialPageRoute(
-
                         builder: (context) =>
-
-                            FertilizerScreen(
-                              language: selectedLanguage,
-                            ),
+                            FertilizerScreen(language: selectedLanguage),
                       ),
                     );
                   },
 
                   child: quickItem(
-
                     Icons.water_drop,
 
                     translations[selectedLanguage]!["fertilizer"]!,
@@ -388,25 +291,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 GestureDetector(
-
                   onTap: () {
-
                     Navigator.push(
                       context,
 
                       MaterialPageRoute(
-
                         builder: (context) =>
-
-                            WeatherScreen(
-                              language: selectedLanguage,
-                            ),
+                            WeatherScreen(language: selectedLanguage),
                       ),
                     );
                   },
 
                   child: quickItem(
-
                     Icons.cloud,
 
                     translations[selectedLanguage]!["weather"]!,
@@ -420,96 +316,59 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget featureCard(
-    IconData icon,
-    String title,
-  ) {
-
+  Widget featureCard(IconData icon, String title) {
     return Container(
-
       height: 180,
 
       decoration: BoxDecoration(
-
         color: Colors.green.shade50,
 
-        borderRadius:
-            BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20),
       ),
 
       child: Column(
-
-        mainAxisAlignment:
-            MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
 
         children: [
-
           CircleAvatar(
-
             radius: 35,
             backgroundColor: Colors.green,
 
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 35,
-            ),
+            child: Icon(icon, color: Colors.white, size: 35),
           ),
 
           const SizedBox(height: 15),
 
           Text(
-
             title,
 
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
         ],
       ),
     );
   }
 
-  Widget quickItem(
-    IconData icon,
-    String title,
-  ) {
-
+  Widget quickItem(IconData icon, String title) {
     return Container(
-
       width: 80,
       height: 80,
 
       decoration: BoxDecoration(
-
         color: Colors.green.shade50,
 
-        borderRadius:
-            BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15),
       ),
 
       child: Column(
-
-        mainAxisAlignment:
-            MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
 
         children: [
-
-          Icon(
-            icon,
-            color: Colors.green,
-          ),
+          Icon(icon, color: Colors.green),
 
           const SizedBox(height: 5),
 
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 12,
-            ),
-          ),
+          Text(title, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );

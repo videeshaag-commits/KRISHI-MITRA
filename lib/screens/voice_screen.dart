@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class VoiceScreen extends StatefulWidget {
   const VoiceScreen({super.key});
@@ -8,77 +9,100 @@ class VoiceScreen extends StatefulWidget {
 }
 
 class _VoiceScreenState extends State<VoiceScreen> {
+  late stt.SpeechToText speech;
+
   bool isListening = false;
+
+  String spokenText = "Tap mic and start speaking";
+
+  @override
+  void initState() {
+    super.initState();
+
+    speech = stt.SpeechToText();
+  }
+
+  void startListening() async {
+    bool available = await speech.initialize();
+
+    if (available) {
+      setState(() {
+        isListening = true;
+      });
+
+      speech.listen(
+        localeId: "en_IN",
+
+        onResult: (result) {
+          setState(() {
+            spokenText = result.recognizedWords;
+          });
+        },
+      );
+    }
+  }
+
+  void stopListening() async {
+    await speech.stop();
+
+    setState(() {
+      isListening = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4FFF4),
-
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-
-        iconTheme: const IconThemeData(color: Colors.black),
-
-        title: const Text(
-          "Voice Assistant",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      appBar: AppBar(title: const Text("Voice Assistant")),
 
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
 
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
 
-              width: isListening ? 180 : 150,
-              height: isListening ? 180 : 150,
-
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.green.shade100,
-              ),
-
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    isListening = !isListening;
-                  });
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (isListening) {
+                    stopListening();
+                  } else {
+                    startListening();
+                  }
                 },
 
-                icon: Icon(
-                  Icons.mic,
-                  size: 70,
-                  color: isListening ? Colors.red : Colors.green,
+                child: CircleAvatar(
+                  radius: 70,
+                  backgroundColor: Colors.green.shade100,
+
+                  child: Icon(
+                    isListening ? Icons.mic : Icons.mic_none,
+                    size: 70,
+                    color: Colors.red,
+                  ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
-            Text(
-              isListening ? "Listening..." : "Tap to Speak",
-
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 15),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-
-              child: Text(
-                "Describe your crop problem using voice input",
-                textAlign: TextAlign.center,
-
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+              Text(
+                isListening ? "Listening..." : "Tap to Speak",
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 20),
+
+              Text(
+                spokenText,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
         ),
       ),
     );

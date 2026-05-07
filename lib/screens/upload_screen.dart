@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
@@ -8,21 +11,144 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
-  bool imageUploaded = false;
+  Uint8List? imageBytes;
+
+  final ImagePicker picker = ImagePicker();
+
+  Future<void> pickFromGallery() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+
+      setState(() {
+        imageBytes = bytes;
+      });
+
+      analyzeImage();
+    }
+  }
+
+  Future<void> pickFromCamera() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+
+      setState(() {
+        imageBytes = bytes;
+      });
+
+      analyzeImage();
+    }
+  }
+
+  void analyzeImage() {
+    List<Map<String, String>> diseases = [
+      {
+        "name": "Leaf Blight",
+        "solution": "Use fungicide spray and avoid overwatering.",
+      },
+
+      {
+        "name": "Brown Spot",
+        "solution": "Maintain proper drainage and use healthy seeds.",
+      },
+
+      {
+        "name": "Bacterial Wilt",
+        "solution": "Remove infected plants immediately.",
+      },
+
+      {"name": "Powdery Mildew", "solution": "Spray neem oil weekly."},
+
+      {"name": "Rust Disease", "solution": "Use sulfur-based fungicide."},
+    ];
+
+    diseases.shuffle();
+
+    final result = diseases.first;
+
+    showDialog(
+      context: context,
+
+      builder: (_) => AlertDialog(
+        title: const Text("Disease Detected"),
+
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            Text(
+              "Possible Disease: ${result["name"]}",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 15),
+
+            Text("Solution:\n${result["solution"]}"),
+          ],
+        ),
+
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showPickerOption() {
+    showModalBottomSheet(
+      context: context,
+
+      builder: (_) {
+        return SizedBox(
+          height: 170,
+
+          child: Column(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo),
+
+                title: const Text("Choose from Gallery"),
+
+                onTap: () {
+                  Navigator.pop(context);
+
+                  pickFromGallery();
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+
+                title: const Text("Open Camera"),
+
+                onTap: () {
+                  Navigator.pop(context);
+
+                  pickFromCamera();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-
-        title: const Text(
-          "Upload Image",
-          style: TextStyle(color: Colors.green),
-        ),
-      ),
+      appBar: AppBar(title: const Text("Upload Image")),
 
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -30,14 +156,10 @@ class _UploadScreenState extends State<UploadScreen> {
         child: Column(
           children: [
             GestureDetector(
-              onTap: () {
-                setState(() {
-                  imageUploaded = true;
-                });
-              },
+              onTap: showPickerOption,
 
               child: Container(
-                height: 250,
+                height: 300,
                 width: double.infinity,
 
                 decoration: BoxDecoration(
@@ -45,38 +167,17 @@ class _UploadScreenState extends State<UploadScreen> {
 
                   borderRadius: BorderRadius.circular(20),
 
-                  border: Border.all(color: Colors.green.shade200),
+                  border: Border.all(color: Colors.green),
                 ),
 
-                child: imageUploaded
+                child: imageBytes == null
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
 
                         children: const [
                           Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                            size: 80,
-                          ),
-
-                          SizedBox(height: 20),
-
-                          Text(
-                            "Image Uploaded Successfully",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        children: const [
-                          Icon(
                             Icons.cloud_upload,
-                            size: 70,
+                            size: 80,
                             color: Colors.green,
                           ),
 
@@ -84,79 +185,31 @@ class _UploadScreenState extends State<UploadScreen> {
 
                           Text(
                             "Tap to Upload Leaf Image",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          SizedBox(height: 10),
-
-                          Text(
-                            "Upload affected crop image",
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ],
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+
+                        child: Image.memory(imageBytes!, fit: BoxFit.cover),
                       ),
               ),
             ),
 
             const SizedBox(height: 30),
 
-            SizedBox(
-              width: double.infinity,
-              height: 55,
+            ElevatedButton(
+              onPressed: showPickerOption,
 
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 55),
+              ),
 
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-
-                onPressed: () {
-                  if (!imageUploaded) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Please upload image first"),
-                      ),
-                    );
-
-                    return;
-                  }
-
-                  showDialog(
-                    context: context,
-
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text("Disease Detected"),
-
-                        content: const Text(
-                          "Possible Disease: Leaf Blight\n\nSolution:\nUse fungicide spray and avoid overwatering.",
-                        ),
-
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-
-                            child: const Text("OK"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-
-                child: const Text(
-                  "Analyze Image",
-
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
+              child: const Text(
+                "Upload Image",
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
           ],
